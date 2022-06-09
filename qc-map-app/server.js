@@ -10,7 +10,7 @@ const MongoStore = require ("connect-mongo")
 const User = require("./models/User")
 const port = process.env.PORT || 5000
 
-const dbUrl = "mongodb+srv://admin:simcity4@map-app.goax4ec.mongodb.net/?retryWrites=true&w=majority"
+const dbUrl = "mongodb+srv://map-user-1:simcity4@map-app.goax4ec.mongodb.net/?retryWrites=true&w=majority"
 
 
 
@@ -22,7 +22,17 @@ app.use(express.json())
 
 app.use(cors());
 
-mongoose.connect(dbUrl, { useNewURLParser: true, useUnifiedTopology: false });
+const conectDB = async () => {
+  await mongoose.connect(dbUrl, { useNewURLParser: true })
+    .catch(function (error) {
+      console.log(`Unable to connect to the Mongo db  ${error} `);
+    });
+  const db = mongoose.connection;
+  db.on("error", (error) => console.error(error));
+  db.once("open", () => console.log("Connected to DB"));
+}
+//conectDB();
+
 //const username = "admin";
 //const password = "simcity4";
 //const cluster = "map-app";
@@ -36,9 +46,7 @@ mongoose.connect(dbUrl, { useNewURLParser: true, useUnifiedTopology: false });
 //  }
 //);
 
-const db = mongoose.connection;
-db.on("error", (error) => console.error(error))
-db.once("open", () => console.log("Connected to DB"))
+
 
 app.use(
   session({
