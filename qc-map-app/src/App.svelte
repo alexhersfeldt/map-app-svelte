@@ -1,29 +1,23 @@
 <script>
-import Map from "./components/map.svelte";
+import Router from "svelte-spa-router"	
+import Home from "./pages/Home.svelte";
+import Login from "./pages/Login.svelte";
+import Signup from "./pages/Signup.svelte";
+import Dashboard from "./pages/Dashboard.svelte";
+
+const routes = {
+	"/" : Home,
+	"/dashboard" : Dashboard ,
+	"/login" : Login,
+	"/signup" : Signup,
+};
+
 </script>
 
 <main>
-	<Map/>
+	<Router {routes} />
 </main>
 
 <style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
 
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
 </style>
