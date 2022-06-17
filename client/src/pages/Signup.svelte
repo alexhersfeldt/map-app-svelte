@@ -6,9 +6,9 @@
     let email;
     let password;
     
-    async function register() {
+    async function signup() {
       try {
-        const { data } = await axios.post("/api/signup", {
+        const { data } = await axios.post("http://localhost:3000/api/signup", {
           email,
           password,
         });
@@ -34,7 +34,7 @@
       <p class="title is-3 is-info">Please sign up to get started</p>
       
       <div id="container">
-        <form class="box" on:submit|preventDefault={register}>
+        <form class="box" on:submit|preventDefault={signup}>
         
                 
           <div class="field" >

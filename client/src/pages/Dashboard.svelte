@@ -1,5 +1,5 @@
 <script>
-    import { user } from "../data/stores"
+    import { user } from "../../../client/src/data/stores"
     import Logout from "../components/Logout.svelte"
     import{ push } from "svelte-spa-router";
     import Map from "../components/map.svelte";

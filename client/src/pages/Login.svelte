@@ -1,13 +1,13 @@
 <script>
     import axios from "axios";
     import{ push } from "svelte-spa-router";
-    import { user } from "../data/stores";
+    import { user } from "../../../client/src/data/stores";
     import toastr from "toastr"
     let email;
     let password;
       async function login() {
         try {
-          const { data } = await axios.post("/api/login", {
+          const { data } = await axios.post("http://localhost:3000/api/login", {
             email,
             password,
           });

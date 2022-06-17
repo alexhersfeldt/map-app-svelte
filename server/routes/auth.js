@@ -1,8 +1,12 @@
 const { Router } = require("express")
 const passport = require("passport")
 const User = require('../models/User')
-
+let bodyParser = require('body-parser');
 const router = Router();
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use(bodyParser.json());
+
+
 
 function ensureLogin(req, res, next) {
     if(!req.isAuthenticated) {
