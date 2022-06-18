@@ -10,9 +10,8 @@ async function logout() {
       });
       
       $user = null
-      console.log(data)
       toastr.success("Logged out")
-      push("/#");
+      push("/");
     
     } catch (error) {
       console.log(error)

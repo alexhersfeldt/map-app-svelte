@@ -38,9 +38,9 @@
         
                 
           <div class="field" >
-            <label for="" class="label">Email</label>
+            <label for="" class="label">Name</label>
             <div class="control">
-              <input class="input" type="text" bind:value={email} required placeholder="e.g. johndoe@gmail.com">
+              <input class="input" type="text" bind:value={email} required placeholder="e.g. Alex">
             </div>
           </div>
     
