@@ -1,15 +1,16 @@
 <script>
   import {Map, View} from 'ol';
   import TileLayer from 'ol/layer/Tile';
-  import OSM from 'ol/source/OSM';
+  import {OSM, Vector as VectorSource} from 'ol/source';
   import { onMount } from "svelte";
   import {get as getProjection} from 'ol/proj';
-  import ImageLayer from 'ol/layer/Image';
-  import ImageWMS from 'ol/source/ImageWMS';
-  import 'ol/ol.css';
   import {Vector, Vector as VectorLayer, VectorImage} from 'ol/layer';
   import Draw from 'ol/interaction/Draw';
   import {useGeographic} from 'ol/proj';
+  import 'ol/ol.css';
+  import {Icon, Style} from 'ol/style';
+  import Feature from 'ol/Feature';
+  import Point from 'ol/geom/Point';
 
   useGeographic();
   let x = 12
@@ -20,9 +21,43 @@
         source: new OSM()
       });
 
+  let source = new VectorSource({});
+
+
+  const iconFeature = new Feature({
+  geometry: new Point([0, 0]),
+  name: 'Null Island',
+  population: 4000,
+  rainfall: 500,
+});
+
+const iconStyle = new Style({
+  image: new Icon({
+    anchor: [0.5, 46],
+    anchorXUnits: 'fraction',
+    anchorYUnits: 'pixels',
+    src: 'public/red.png',
+  }),
+});
+
+iconFeature.setStyle(iconStyle);
+
+const vectorSource = new VectorSource({
+  features: [iconFeature],
+});
+
+const vectorLayer = new VectorLayer({
+  source: vectorSource,
+});
+
+  let vector = new VectorLayer({
+  source: source,
+  style: iconStyle
+  });
+
   // creating variables to be used in map
   let map;
-  let layers = [osmMapLayer]
+  let layers = [osmMapLayer, vector, vectorLayer]
   let target = "map"
   let view = new View({
       center: [x, y],
@@ -81,6 +116,26 @@
       source: new Vector
   })
 
+  // Draw point functions
+ 
+
+  let draw; // global so we can remove it later
+  function addInteraction(element) {
+  let value = element;
+    if (value !== 'None') {
+      draw = new Draw({
+        source: source,
+        type: "Point",
+      });
+      map.addInteraction(draw);
+    }
+  }
+
+  function handleBtnClick(type) {
+  var element = type;
+  map.removeInteraction(draw);
+  addInteraction(element);
+};
 
 </script>
     
@@ -90,9 +145,11 @@
         <button class="button is-info is-light" on:click={() => updateCenterCord()}>Get Current Cordinate: </button>
         <span class="tag is-info is-light is-large"> {cord1} {cord2}</span>
         <br>
-        <button class="button is-warning is-large" >Have been</button>
-        <button class="button is-info is-large">Want to Visit</button>
-        <button class="button is-danger is-large" >Dont want to Visit</button>
+        <span class="tag is-light is-large"> Add a location:</span>
+        <button class="button is-warning is-large" on:click={() => handleBtnClick("yellow")}>Have been</button>
+        <button class="button is-info is-large" on:click={() => handleBtnClick("blue")}>Want to Visit</button>
+        <button class="button is-danger is-large" on:click={() => handleBtnClick("red")}>Dont want to Visit</button>
+        <button class="button" on:click={() => handleBtnClick("None")}>Done</button>
     </div>
       <div id="mapdiv">
         <div id="map"></div>
@@ -111,10 +168,10 @@ height: 100%;
 }
 #mapdiv {
     display: flex;
-    border: rgb(31, 42, 85);
-    border-width: 2px;
+    border: rgb(94, 111, 180);
+    border-width: 5px;
     border-style: solid;
-    border-radius: 2px;
+    border-radius: 5px;
     height:38vmax;
     width: 80%;
   }

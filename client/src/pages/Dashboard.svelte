@@ -43,7 +43,7 @@
     -->
     <div class="wrapper">
         <h1 class="subtitle is-3"> Welcome Alex</h1>
-        <h1 class="subtitle is-4">Create a map with your dream destinations, or places you would only end up in a nightmare</h1>
+        <span class="tag is-light is-large"> Create a map with your dream destinations, or places you would only end up in a nightmare:</span>
         <button class="button is-info is-light" on:click= {logout}>Logout</button>
     </div>
     
