@@ -27,20 +27,22 @@
     }
   }
 </script>
-    <!--
+    
     {#if !userValue}
         <h1>Not logged in</h1>
         <button class="button is-info is-light" on:click={() => redirect("/login")}>Login</button>
 
     {:else}
-        <h1 class="subtitle is-3">Welcome {userValue.email}</h1>
-        <Map/>
-        <div class="logout-button">
-            <button class="button is-info is-light" on:click= {logout}>Logout</button>
-        </div>
-        
-     {/if}
-    -->
+      <div class="wrapper">
+        <h1 class="subtitle is-3"> Welcome {userValue.email}</h1>
+        <span class="tag is-light is-large"> Create a map with your dream destinations, or places you would only end up in a nightmare:</span>
+        <button class="button is-info is-light" on:click= {logout}>Logout</button>
+      </div>
+  
+      <Map/>
+    {/if}
+    
+    <!--
     <div class="wrapper">
         <h1 class="subtitle is-3"> Welcome Alex</h1>
         <span class="tag is-light is-large"> Create a map with your dream destinations, or places you would only end up in a nightmare:</span>
@@ -52,7 +54,7 @@
         <div class="logout-button">
             
         </div>
-        
+        -->
 
         
     

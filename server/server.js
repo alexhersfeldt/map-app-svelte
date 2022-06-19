@@ -18,14 +18,23 @@ const db = mongoose.connection;
 db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("Connected to DB"));
 
-app.use(
-  session({
-      resave:true,
-      saveUninitialized:true,
-      secret:"maps rule the world",
-      store: MongoStore.create({mongoUrl: process.env.DATABASE_URL})
-  })
-);
+
+const sessionMiddleware = session({
+  resave:true,
+  saveUninitialized:true,
+  secret:"maps rule the world",
+  store: MongoStore.create({mongoUrl: process.env.DATABASE_URL})
+})
+app.use(sessionMiddleware);
+
+const http = require("http");
+const server = http.createServer(app);
+
+const Server = require("socket.io").Server
+const io = new Server(server);
+
+const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
+io.use(wrap(sessionMiddleware));
 
 passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());

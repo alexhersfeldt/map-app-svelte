@@ -3,61 +3,69 @@
   import TileLayer from 'ol/layer/Tile';
   import {OSM, Vector as VectorSource} from 'ol/source';
   import { onMount } from "svelte";
-  import {get as getProjection} from 'ol/proj';
-  import {Vector, Vector as VectorLayer, VectorImage} from 'ol/layer';
+  import {Vector as VectorLayer, VectorImage} from 'ol/layer';
   import Draw from 'ol/interaction/Draw';
   import {useGeographic} from 'ol/proj';
   import 'ol/ol.css';
-  import {Icon, Style} from 'ol/style';
-  import Feature from 'ol/Feature';
-  import Point from 'ol/geom/Point';
+  import {Icon, Style, Stroke, Fill, Circle} from 'ol/style';
+
 
   useGeographic();
   let x = 12
   let y = 55
   // Layers
-  
-  const osmMapLayer = new TileLayer({
+
+
+  // Main background layer
+  let osmMapLayer = new TileLayer({
         source: new OSM()
       });
-
-  let source = new VectorSource({});
-
-
-  const iconFeature = new Feature({
-  geometry: new Point([0, 0]),
-  name: 'Null Island',
-  population: 4000,
-  rainfall: 500,
-});
-
-const iconStyle = new Style({
-  image: new Icon({
-    anchor: [0.5, 46],
-    anchorXUnits: 'fraction',
-    anchorYUnits: 'pixels',
-    src: 'public/red.png',
-  }),
-});
-
-iconFeature.setStyle(iconStyle);
-
-const vectorSource = new VectorSource({
-  features: [iconFeature],
-});
-
-const vectorLayer = new VectorLayer({
-  source: vectorSource,
-});
-
-  let vector = new VectorLayer({
-  source: source,
-  style: iconStyle
+  
+  
+  // Blue points
+  let blueSource = new VectorSource();
+  let blueLayer = new VectorLayer({
+  source: blueSource,
+  style: new Style({
+      image: new Icon({
+        src: "images/blue.png",
+        crossOrigin: 'anonymous',
+        scale: 0.3,
+      }),
+    })
   });
+
+  // Red points
+  let redSource = new VectorSource();
+  let redLayer = new VectorLayer({
+  source: redSource,
+  style: new Style({
+      image: new Icon({
+        src: "images/red.png",
+        crossOrigin: 'anonymous',
+        scale: 0.3,
+      }),
+    })
+  });
+
+  // Yellow points
+  let yellowSource = new VectorSource();
+  let yellowLayer = new VectorLayer({
+  source: yellowSource,
+  style: new Style({
+      image: new Icon({
+        src: "images/yellow.png",
+        crossOrigin: 'anonymous',
+        scale: 0.3,
+      }),
+    })
+  });
+
+  
 
   // creating variables to be used in map
   let map;
-  let layers = [osmMapLayer, vector, vectorLayer]
+  let layers = [osmMapLayer,  blueLayer, redLayer, yellowLayer ]
   let target = "map"
   let view = new View({
       center: [x, y],
@@ -91,7 +99,7 @@ const vectorLayer = new VectorLayer({
     }
   }
 
-  // Function to up gps cordinates
+  // Function to up gps cordinates from center of map view
   let centerCord;
   let cord1 = ""
   let cord2 = ""
@@ -112,27 +120,52 @@ const vectorLayer = new VectorLayer({
     }
   }
 
-  const polygonLayer = new VectorImage({
-      source: new Vector
-  })
-
-  // Draw point functions
+  //  --- Functions used in the creation of pins/points --------------------
  
+  // function to chnage color of cursor when placing pins
+  function getColor(color) {
+    let circleStyle= new Style({
+      image: new Circle({
+        radius: 8,
+          stroke: new Stroke({
+            color: color
+          }),
+          fill: new Fill({
+            color: color
+          })
+      }),
+    })
+    return circleStyle
+  }
 
-  let draw; // global so we can remove it later
-  function addInteraction(element) {
-  let value = element;
+
+    // function to Change source of pin 
+  function getSource(color) {
+    if (color == "blue") {
+      return blueSource;
+    } else if (color == "red") {
+      return redSource;
+    } else {
+      return yellowSource;
+    }
+  }
+
+  // Function fo add pins
+  let draw;
+  function addInteraction(color) {
+  let value = color;
     if (value !== 'None') {
       draw = new Draw({
-        source: source,
+        source: getSource(color),
         type: "Point",
+        style: getColor(color)
       });
       map.addInteraction(draw);
     }
   }
 
   function handleBtnClick(type) {
-  var element = type;
+  let element = type;
   map.removeInteraction(draw);
   addInteraction(element);
 };
