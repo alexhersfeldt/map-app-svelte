@@ -9,7 +9,8 @@
   import 'ol/ol.css';
   import {Icon, Style, Stroke, Fill, Circle} from 'ol/style';
   import io from "socket.io-client";
-  import Suggestion from ''
+  
+  import Suggestions from './Suggestions.Svelte';
 
 
   useGeographic();
@@ -173,7 +174,8 @@
 };
 
 </script>
-    
+  
+
 <main>
   <div class="wrapper">
     <div class="dashboard1">
@@ -186,16 +188,18 @@
         <button class="button is-danger is-large" on:click={() => handleBtnClick("red")}>Dont want to Visit</button>
         <button class="button" on:click={() => handleBtnClick("None")}>Done</button>
     </div>
-      <div id="mapdiv">
-        <div id="map"></div>
-      </div>
+    <div id="mapdiv">
+      <div id="map"></div>
+    </div>
+    <div class="suggestions">
+      <Suggestions/>
+    </div>
   </div>
  
 
 </main>
      
-    
-    
+      
 <style>
 #map {
 width:100%;

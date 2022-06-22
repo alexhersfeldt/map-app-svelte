@@ -1,5 +1,4 @@
 <script>
-    import io from "socket.io-client";
     import { user, suggestions as Suggestions } from "../data/stores";
     import toastr from "toastr"
 
@@ -28,7 +27,7 @@
     <div>
         {#each Suggestions as suggestion}
         <label for ="comment">Suggestion add by ${suggestion.name}</label>
-        <span name ="comment" class="tag is-light is-large">${suggestion.text}</span>
+        <span name ="comment" class="tag is-light">${suggestion.text}</span>
         {/each}   
         <form>
             <textarea class="textarea is-info" placeholder="Info textarea" bind:value={suggestion} ></textarea>
