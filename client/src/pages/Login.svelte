@@ -12,7 +12,6 @@
             password,
           });
           $user = data.user;
-          console.log(data.user);
           toastr.success("Logged in");
           push("/dashboard");
         } catch (error) {

@@ -1,30 +1,30 @@
 <script>
-    import { user } from "../data/stores"
-    import{ push } from "svelte-spa-router";
-    import Map from "../components/map.svelte";
-    import axios from "axios";
-    import toastr from "toastr"
+  import { user } from "../data/stores"
+  import{ push } from "svelte-spa-router";
+  import Map from "../components/map.svelte";
+  import axios from "axios";
+  import toastr from "toastr"
 
-    let userValue;
-    function redirect(url) {
-        push(url)
-    }
-    user.subscribe(value => {
-		userValue = value;
-	});
+  let userValue;
+  function redirect(url) {
+      push(url)
+  }
+  user.subscribe(value => {
+  userValue = value;
+  });
 
-    async function logout() {
-    try {
-      const { data } = await axios.post("http://localhost:3000/api/logout", {
-      });
-      
-      $user = null
-      toastr.success("Logged out")
-      push("/");
+  async function logout() {
+  try {
+    const { data } = await axios.post("http://localhost:3000/api/logout", {
+    });
     
-    } catch (error) {
-      console.log(error)
-    }
+    $user = null
+    toastr.success("Logged out")
+    push("/");
+  
+  } catch (error) {
+    console.log(error)
+  }
   }
 </script>
     

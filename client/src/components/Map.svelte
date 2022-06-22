@@ -8,6 +8,8 @@
   import {useGeographic} from 'ol/proj';
   import 'ol/ol.css';
   import {Icon, Style, Stroke, Fill, Circle} from 'ol/style';
+  import io from "socket.io-client";
+  import Suggestion from ''
 
 
   useGeographic();
