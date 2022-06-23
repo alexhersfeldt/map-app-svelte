@@ -11,7 +11,7 @@
             email,
             password,
           });
-          $user = data.user;
+          user.set(data.user);
           toastr.success("Logged in");
           push("/dashboard");
         } catch (error) {

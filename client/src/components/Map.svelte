@@ -9,13 +9,15 @@
   import 'ol/ol.css';
   import {Icon, Style, Stroke, Fill, Circle} from 'ol/style';
   import io from "socket.io-client";
+
   
-  import Suggestions from './Suggestions.Svelte';
 
 
   useGeographic();
-  let x = 12
-  let y = 55
+  let x = 12;
+  let y = 55;
+  let x2;
+  let y2;
   // Layers
 
 
@@ -91,18 +93,20 @@
   function updateXandY() {
     view.setCenter([x2, y2])
   }
-  let count = 0;
-  function updateXandYFromArray() {
-    view.setCenter([cordArray[count].x, cordArray[count].y]);
-    view.setZoom(8);
-    if(count > cordArray.length-2) {
-      count = 0;
-    } else {
-      count += 1;
-    }
+  function updateXandYSocket(x,y) {
+    view.setCenter([x, y]);
+    changeCenterSocket(x, y);
   }
 
-  // Function to up gps cordinates from center of map view
+  const socket = io();
+    socket.on("changeCenter", ({ x, y }) => {
+        updateXandYSocket(x,y)
+    });
+    function changeCenterSocket(x,y) {
+        socket.emit("changeCenter", { x, y });
+    }
+
+  // Function to update gps cordinates from center of map view
   let centerCord;
   let cord1 = ""
   let cord2 = ""
@@ -178,6 +182,7 @@
 
 <main>
   <div class="wrapper">
+
     <div class="dashboard1">
         <button class="button is-info is-light" on:click={() => updateCenterCord()}>Get Current Cordinate: </button>
         <span class="tag is-info is-light is-large"> {cord1} {cord2}</span>
@@ -188,12 +193,21 @@
         <button class="button is-danger is-large" on:click={() => handleBtnClick("red")}>Dont want to Visit</button>
         <button class="button" on:click={() => handleBtnClick("None")}>Done</button>
     </div>
+
     <div id="mapdiv">
       <div id="map"></div>
     </div>
-    <div class="suggestions">
-      <Suggestions/>
+
+    <div class="dashboard2">
+      <label class="is-light "for ="comment">E/W coordinate:</label>
+      <input class="input is-info" type="text" bind:value={x2} required placeholder="Positive = E, Negative = W">
+      <label class="is-light "for ="comment">N/S coordinate:</label>
+      <input class="input is-info" type="text" bind:value={y2} required placeholder="Positive = N, Negative = S">
+      <br>
+      <span class="tag is-info is-light">Positive numbers for N/E negative for S/W</span>
+      <button class="button is-info is-light" on:click={() => updateXandYSocket(x2, y2)}>Set Center For all </button>
     </div>
+    
   </div>
  
 
@@ -212,9 +226,14 @@ height: 100%;
     border-style: solid;
     border-radius: 5px;
     height:38vmax;
-    width: 80%;
+    width: 65%;
   }
-.dashboard1 {
+.dashboard1, .dashboard2 {
+  border: rgb(120, 136, 200);
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 5px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;

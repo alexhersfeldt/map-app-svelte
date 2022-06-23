@@ -31,7 +31,7 @@ const sessionMiddleware = session({
 app.use(sessionMiddleware);
 
 
-// Socket Setup
+// Socket Setup  -- could not get this to work
 const port = process.env.PORT || 3000
 const http = require("http");
 const server = http.createServer(app.listen(port, () => {
@@ -42,12 +42,10 @@ let io = socket(server)
 //const Server = require("socket.io").Server
 //const io = new Server(server);
 
-io.on('connection', (socket) => {
-  console.log('a user connected');
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-});
+
+io.on("changeCenter", (socket)=>{
+  socket.emit(x,y)
+})
 
 const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
 io.use(wrap(sessionMiddleware));
